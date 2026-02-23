@@ -16,6 +16,7 @@ function buildChartData(items: GroceryItem[]) {
   const month = now.getMonth();
   const daysInMonth = new Date(year, month + 1, 0).getDate();
 
+  // Cumulative waste by day
   const dailyWaste: Record<number, number> = {};
   for (let d = 1; d <= daysInMonth; d++) dailyWaste[d] = 0;
 
@@ -27,16 +28,15 @@ function buildChartData(items: GroceryItem[]) {
     }
   });
 
-  // Show ~7 evenly spaced ticks
+  // Build cumulative total
   const step = Math.max(1, Math.floor(daysInMonth / 6));
-  const points: { day: string; wasted: number }[] = [];
+  const points: { day: string; total: number }[] = [];
+  let cumulative = 0;
   for (let d = 1; d <= daysInMonth; d += step) {
-    // Sum from this day to next tick
-    let sum = 0;
     for (let j = d; j < Math.min(d + step, daysInMonth + 1); j++) {
-      sum += dailyWaste[j];
+      cumulative += dailyWaste[j];
     }
-    points.push({ day: String(d), wasted: sum });
+    points.push({ day: String(d), total: cumulative });
   }
   return points;
 }
@@ -97,11 +97,11 @@ const ImpactChart = ({ totalSaved, totalWasted, itemsRescued, hasData, items }: 
                 borderRadius: "8px",
                 fontSize: "12px",
               }}
-              formatter={(value: number) => [`₹${value}`, "Wasted"]}
+              formatter={(value: number) => [`₹${value}`, "Total Wasted"]}
             />
             <Area
               type="monotone"
-              dataKey="wasted"
+              dataKey="total"
               stroke="hsl(22, 25%, 48%)"
               strokeWidth={2}
               fill="url(#brownGradient)"
