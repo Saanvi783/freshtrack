@@ -15,8 +15,8 @@ const Index = () => {
       <div className="max-w-md mx-auto px-5 py-8">
         {/* Header */}
         <div className="text-center mb-8">
-          <h1 className="text-xl font-semibold text-foreground">FreshTrack</h1>
-          <p className="text-sm text-muted-foreground mt-1">Track what you buy. Waste less.</p>
+          <h1 className="text-3xl font-bold tracking-tight text-foreground">FreshTrack</h1>
+          <p className="text-sm text-muted-foreground mt-1.5">Track what you buy. Waste less.</p>
         </div>
 
         {/* Empty state */}
