@@ -59,20 +59,21 @@ const ImpactChart = ({ totalSaved, totalWasted, itemsRescued, hasData, items }: 
 
       <div className="h-36">
         <ResponsiveContainer width="100%" height="100%">
-          <AreaChart data={chartData}>
+          <AreaChart data={chartData} layout="vertical">
             <defs>
-              <linearGradient id="brownGradient" x1="0" y1="0" x2="0" y2="1">
+              <linearGradient id="brownGradient" x1="1" y1="0" x2="0" y2="0">
                 <stop offset="0%" stopColor="hsl(22, 25%, 48%)" stopOpacity={0.15} />
                 <stop offset="100%" stopColor="hsl(22, 25%, 48%)" stopOpacity={0} />
               </linearGradient>
             </defs>
-            <XAxis
+            <YAxis
               dataKey="day"
+              type="category"
               axisLine={false}
               tickLine={false}
               tick={{ fontSize: 11, fill: "hsl(37, 5%, 41%)" }}
             />
-            <YAxis hide />
+            <XAxis type="number" hide />
             <Tooltip
               contentStyle={{
                 background: "hsl(40, 25%, 93%)",
