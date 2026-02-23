@@ -72,13 +72,7 @@ const ImpactChart = ({ totalSaved, totalWasted, itemsRescued, hasData, items }: 
               tickLine={false}
               tick={{ fontSize: 11, fill: "hsl(37, 5%, 41%)" }}
             />
-            <YAxis
-              axisLine={false}
-              tickLine={false}
-              tick={{ fontSize: 10, fill: "hsl(37, 5%, 41%)" }}
-              width={35}
-              domain={[0, (max: number) => Math.max(max, 10)]}
-            />
+            <YAxis hide />
             <Tooltip
               contentStyle={{
                 background: "hsl(40, 25%, 93%)",
