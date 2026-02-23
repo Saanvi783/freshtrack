@@ -1,29 +1,38 @@
-import { Brain, Sparkles } from "lucide-react";
+import { Lightbulb } from "lucide-react";
+import { GroceryItem, categorizeItem } from "@/hooks/useGroceryStore";
 
-const SmartInsight = () => {
+interface SmartInsightProps {
+  items: GroceryItem[];
+}
+
+const SmartInsight = ({ items }: SmartInsightProps) => {
+  const hasData = items.length > 0;
+
+  // Find most frequently expired item
+  const expired = items.filter((i) => categorizeItem(i) === "expired");
+  const expiredCounts: Record<string, number> = {};
+  expired.forEach((i) => {
+    expiredCounts[i.name] = (expiredCounts[i.name] || 0) + 1;
+  });
+  const topWasted = Object.entries(expiredCounts).sort((a, b) => b[1] - a[1])[0];
+
   return (
-    <div className="insight-glow p-5">
-      <div className="flex items-center justify-between mb-3">
-        <div className="flex items-center gap-2">
-          <Brain className="w-5 h-5 text-primary" />
-          <h2 className="font-heading font-semibold text-foreground">Smart Insight</h2>
-        </div>
-        <span className="badge-ai">
-          <Sparkles className="w-3 h-3" />
-          AI Powered
-        </span>
+    <div className="bg-card border border-border rounded-lg p-4">
+      <div className="flex items-center gap-2 mb-3">
+        <Lightbulb className="w-4 h-4 text-primary" />
+        <h2 className="font-medium text-sm text-foreground">Smart Insight</h2>
       </div>
-      <p className="text-sm text-muted-foreground mb-4">
-        You often waste <span className="font-semibold text-foreground">spinach</span>. Buy less next time?
-      </p>
-      <div className="flex gap-2">
-        <button className="px-4 py-2 rounded-xl text-sm font-medium text-primary-foreground bg-primary hover:opacity-90 transition-opacity">
-          Adjust Quantity
-        </button>
-        <button className="px-4 py-2 rounded-xl text-sm font-medium text-muted-foreground bg-secondary hover:bg-muted transition-colors">
-          Ignore
-        </button>
-      </div>
+      {!hasData ? (
+        <p className="text-sm text-muted-foreground">No data yet. Add items to see insights.</p>
+      ) : topWasted ? (
+        <p className="text-sm text-muted-foreground">
+          You often waste <span className="font-medium text-foreground">{topWasted[0]}</span>. Consider buying less next time.
+        </p>
+      ) : (
+        <p className="text-sm text-muted-foreground">
+          You have {items.length} item{items.length !== 1 ? "s" : ""} tracked. Keep it up!
+        </p>
+      )}
     </div>
   );
 };
