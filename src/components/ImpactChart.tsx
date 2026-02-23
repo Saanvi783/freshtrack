@@ -10,39 +10,22 @@ interface ImpactChartProps {
   items: GroceryItem[];
 }
 
-function buildChartData(items: GroceryItem[]) {
+function buildChartData(totalWasted: number) {
   const now = new Date();
-  const year = now.getFullYear();
-  const month = now.getMonth();
-  const daysInMonth = new Date(year, month + 1, 0).getDate();
+  const daysInMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
+  const currentDay = now.getDate();
 
-  // Cumulative waste by day
-  const dailyWaste: Record<number, number> = {};
-  for (let d = 1; d <= daysInMonth; d++) dailyWaste[d] = 0;
-
-  const expired = items.filter((i) => categorizeItem(i) === "expired");
-  expired.forEach((item) => {
-    const expiry = new Date(item.expiryDate);
-    if (expiry.getFullYear() === year && expiry.getMonth() === month) {
-      dailyWaste[expiry.getDate()] = (dailyWaste[expiry.getDate()] || 0) + item.cost;
-    }
-  });
-
-  // Build cumulative total
+  // Simple flat line at total waste value up to current day, 0 after
   const step = Math.max(1, Math.floor(daysInMonth / 6));
   const points: { day: string; total: number }[] = [];
-  let cumulative = 0;
   for (let d = 1; d <= daysInMonth; d += step) {
-    for (let j = d; j < Math.min(d + step, daysInMonth + 1); j++) {
-      cumulative += dailyWaste[j];
-    }
-    points.push({ day: String(d), total: cumulative });
+    points.push({ day: String(d), total: d <= currentDay ? totalWasted : 0 });
   }
   return points;
 }
 
 const ImpactChart = ({ totalSaved, totalWasted, itemsRescued, hasData, items }: ImpactChartProps) => {
-  const chartData = buildChartData(items);
+  const chartData = buildChartData(totalWasted);
 
   return (
     <div className="bg-card border border-border rounded-lg p-4">
@@ -89,7 +72,13 @@ const ImpactChart = ({ totalSaved, totalWasted, itemsRescued, hasData, items }: 
               tickLine={false}
               tick={{ fontSize: 11, fill: "hsl(37, 5%, 41%)" }}
             />
-            <YAxis hide />
+            <YAxis
+              axisLine={false}
+              tickLine={false}
+              tick={{ fontSize: 10, fill: "hsl(37, 5%, 41%)" }}
+              width={35}
+              domain={[0, (max: number) => Math.max(max, 10)]}
+            />
             <Tooltip
               contentStyle={{
                 background: "hsl(40, 25%, 93%)",
