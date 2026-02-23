@@ -1,41 +1,42 @@
-import { Leaf } from "lucide-react";
+import { Leaf, X } from "lucide-react";
+import { GroceryItem, getDaysLeft } from "@/hooks/useGroceryStore";
 
-interface GroceryItem {
-  emoji: string;
-  name: string;
-  daysLeft: number;
+interface FreshSectionProps {
+  items: GroceryItem[];
+  onRemove: (id: string) => void;
 }
 
-const items: GroceryItem[] = [
-  { emoji: "🍎", name: "Apple", daysLeft: 7 },
-  { emoji: "🥚", name: "Eggs", daysLeft: 12 },
-  { emoji: "🧀", name: "Cheese", daysLeft: 9 },
-  { emoji: "🥕", name: "Carrots", daysLeft: 5 },
-  { emoji: "🍞", name: "Bread", daysLeft: 4 },
-];
-
-const FreshSection = () => {
+const FreshSection = ({ items, onRemove }: FreshSectionProps) => {
   return (
-    <div className="glass-card p-5">
-      <div className="flex items-center gap-2 mb-4">
-        <Leaf className="w-5 h-5 text-fresh" />
-        <h2 className="font-heading font-semibold text-foreground">Fresh</h2>
-        <span className="badge-fresh">{items.length}</span>
+    <div className="bg-card border border-border rounded-lg p-4">
+      <div className="flex items-center gap-2 mb-3">
+        <Leaf className="w-4 h-4 text-fresh" />
+        <h2 className="font-medium text-sm text-foreground">Fresh</h2>
+        <span className="text-xs text-fresh font-medium">({items.length})</span>
       </div>
-      <div className="space-y-3">
-        {items.map((item) => (
-          <div
-            key={item.name}
-            className="flex items-center justify-between p-3 rounded-xl bg-secondary/60 hover:bg-secondary transition-colors"
-          >
-            <div className="flex items-center gap-3">
-              <span className="text-xl">{item.emoji}</span>
-              <span className="font-medium text-foreground">{item.name}</span>
+      {items.length === 0 ? (
+        <p className="text-sm text-muted-foreground">All fresh — nothing to worry about.</p>
+      ) : (
+        <div className="space-y-2">
+          {items.map((item) => (
+            <div
+              key={item.id}
+              className="flex items-center justify-between py-2 px-3 rounded-lg bg-background"
+            >
+              <div className="flex items-center gap-2">
+                <span className="text-sm text-foreground">{item.name}</span>
+                <span className="text-xs text-muted-foreground">{item.category}</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="text-xs text-fresh font-medium">{getDaysLeft(item)} days</span>
+                <button onClick={() => onRemove(item.id)} className="text-muted-foreground hover:text-foreground">
+                  <X className="w-3.5 h-3.5" />
+                </button>
+              </div>
             </div>
-            <span className="badge-fresh">{item.daysLeft} days</span>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 };

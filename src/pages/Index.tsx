@@ -1,30 +1,49 @@
-import { Sparkles } from "lucide-react";
 import SmartInsight from "@/components/SmartInsight";
 import EatSoonSection from "@/components/EatSoonSection";
 import FreshSection from "@/components/FreshSection";
+import ExpiredSection from "@/components/ExpiredSection";
 import ImpactChart from "@/components/ImpactChart";
 import AddItemModal from "@/components/AddItemModal";
+import { useGroceryStore } from "@/hooks/useGroceryStore";
 
 const Index = () => {
+  const { items, addItem, removeItem, eatSoon, fresh, expired, totalSaved, totalWasted, itemsRescued } = useGroceryStore();
+  const hasData = items.length > 0;
+
   return (
     <div className="min-h-screen bg-background">
-      <div className="max-w-md mx-auto px-4 py-6 pb-24">
+      <div className="max-w-md mx-auto px-5 py-8">
         {/* Header */}
-        <div className="flex items-center gap-2 mb-6">
-          <Sparkles className="w-6 h-6 text-primary" />
-          <h1 className="font-heading text-2xl font-bold gradient-text">FreshTrack</h1>
+        <div className="text-center mb-8">
+          <h1 className="text-xl font-semibold text-foreground">FreshTrack</h1>
+          <p className="text-sm text-muted-foreground mt-1">Track what you buy. Waste less.</p>
         </div>
 
-        {/* Content */}
-        <div className="space-y-4">
-          <SmartInsight />
-          <EatSoonSection />
-          <FreshSection />
-          <ImpactChart />
+        {/* Empty state */}
+        {!hasData && (
+          <div className="bg-card border border-border rounded-lg p-6 text-center mb-4">
+            <p className="text-sm text-muted-foreground mb-4">
+              No items yet. Add your first item to start tracking freshness.
+            </p>
+            <AddItemModal onAdd={addItem} />
+          </div>
+        )}
+
+        {hasData && (
+          <div className="mb-4">
+            <AddItemModal onAdd={addItem} />
+          </div>
+        )}
+
+        {/* Sections */}
+        <div className="space-y-3">
+          <EatSoonSection items={eatSoon} onRemove={removeItem} />
+          <FreshSection items={fresh} onRemove={removeItem} />
+          <ExpiredSection items={expired} onRemove={removeItem} />
+          <ImpactChart totalSaved={totalSaved} totalWasted={totalWasted} itemsRescued={itemsRescued} hasData={hasData} />
+          <SmartInsight items={items} />
         </div>
       </div>
-
-      <AddItemModal />
     </div>
   );
 };
