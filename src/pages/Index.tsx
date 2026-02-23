@@ -4,6 +4,7 @@ import FreshSection from "@/components/FreshSection";
 import ExpiredSection from "@/components/ExpiredSection";
 import ImpactChart from "@/components/ImpactChart";
 import AddItemModal from "@/components/AddItemModal";
+import DarkModeToggle from "@/components/DarkModeToggle";
 import { useGroceryStore } from "@/hooks/useGroceryStore";
 
 const Index = () => {
@@ -14,9 +15,12 @@ const Index = () => {
     <div className="min-h-screen bg-background">
       <div className="max-w-md mx-auto px-5 py-8">
         {/* Header */}
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold tracking-tight text-foreground">FreshTrack</h1>
-          <p className="text-sm text-muted-foreground mt-1.5">Track what you buy. Waste less.</p>
+        <div className="flex items-center justify-between mb-8">
+          <div>
+            <h1 className="text-3xl font-bold tracking-tight text-foreground">FreshTrack</h1>
+            <p className="text-sm text-muted-foreground mt-1.5">Track what you buy. Waste less.</p>
+          </div>
+          <DarkModeToggle />
         </div>
 
         {/* Empty state */}
@@ -40,7 +44,7 @@ const Index = () => {
           <EatSoonSection items={eatSoon} onRemove={removeItem} />
           <FreshSection items={fresh} onRemove={removeItem} />
           <ExpiredSection items={expired} onRemove={removeItem} />
-          <ImpactChart totalSaved={totalSaved} totalWasted={totalWasted} itemsRescued={itemsRescued} hasData={hasData} />
+          <ImpactChart totalSaved={totalSaved} totalWasted={totalWasted} itemsRescued={itemsRescued} hasData={hasData} items={items} />
           <SmartInsight items={items} />
         </div>
       </div>
