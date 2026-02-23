@@ -1,24 +1,49 @@
 import { BarChart3 } from "lucide-react";
 import { Area, AreaChart, ResponsiveContainer, XAxis, YAxis, Tooltip } from "recharts";
+import { GroceryItem, categorizeItem } from "@/hooks/useGroceryStore";
 
 interface ImpactChartProps {
   totalSaved: number;
   totalWasted: number;
   itemsRescued: number;
   hasData: boolean;
+  items: GroceryItem[];
 }
 
-const defaultChartData = [
-  { day: "1", wasted: 0 },
-  { day: "5", wasted: 0 },
-  { day: "10", wasted: 0 },
-  { day: "15", wasted: 0 },
-  { day: "20", wasted: 0 },
-  { day: "25", wasted: 0 },
-  { day: "30", wasted: 0 },
-];
+function buildChartData(items: GroceryItem[]) {
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = now.getMonth();
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
 
-const ImpactChart = ({ totalSaved, totalWasted, itemsRescued, hasData }: ImpactChartProps) => {
+  const dailyWaste: Record<number, number> = {};
+  for (let d = 1; d <= daysInMonth; d++) dailyWaste[d] = 0;
+
+  const expired = items.filter((i) => categorizeItem(i) === "expired");
+  expired.forEach((item) => {
+    const expiry = new Date(item.expiryDate);
+    if (expiry.getFullYear() === year && expiry.getMonth() === month) {
+      dailyWaste[expiry.getDate()] = (dailyWaste[expiry.getDate()] || 0) + item.cost;
+    }
+  });
+
+  // Show ~7 evenly spaced ticks
+  const step = Math.max(1, Math.floor(daysInMonth / 6));
+  const points: { day: string; wasted: number }[] = [];
+  for (let d = 1; d <= daysInMonth; d += step) {
+    // Sum from this day to next tick
+    let sum = 0;
+    for (let j = d; j < Math.min(d + step, daysInMonth + 1); j++) {
+      sum += dailyWaste[j];
+    }
+    points.push({ day: String(d), wasted: sum });
+  }
+  return points;
+}
+
+const ImpactChart = ({ totalSaved, totalWasted, itemsRescued, hasData, items }: ImpactChartProps) => {
+  const chartData = buildChartData(items);
+
   return (
     <div className="bg-card border border-border rounded-lg p-4">
       <div className="flex items-center gap-2 mb-3">
@@ -51,7 +76,7 @@ const ImpactChart = ({ totalSaved, totalWasted, itemsRescued, hasData }: ImpactC
 
       <div className="h-36">
         <ResponsiveContainer width="100%" height="100%">
-          <AreaChart data={defaultChartData}>
+          <AreaChart data={chartData}>
             <defs>
               <linearGradient id="brownGradient" x1="0" y1="0" x2="0" y2="1">
                 <stop offset="0%" stopColor="hsl(22, 25%, 48%)" stopOpacity={0.15} />
