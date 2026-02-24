@@ -68,7 +68,6 @@ const ImpactChart = ({ totalSaved, totalWasted, itemsRescued, hasData, items }: 
             </defs>
             <XAxis
               dataKey="day"
-              reversed
               axisLine={false}
               tickLine={false}
               tick={{ fontSize: 11, fill: "hsl(37, 5%, 41%)" }}
