@@ -1,73 +1,62 @@
-# Welcome to your Lovable project
+# FreshTrack
 
-## Project info
+FreshTrack is a minimal grocery expiration tracking web application designed to help users reduce food waste and manage household spending.
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+The application allows users to add grocery items, monitor expiry dates, and view monthly impact insights — all within a calm, distraction-free interface.
 
-## How can I edit this code?
+---
 
-There are several ways of editing your application.
+## ✨ Features
 
-**Use Lovable**
+- Add grocery items with name, category, expiry date, and cost
+- Automatic categorization:
+  - **Eat Soon** (expiring within 2 days)
+  - **Fresh**
+  - **Expired**
+- Monthly impact tracking (Saved vs Wasted)
+- Smart insights based on usage patterns
+- LocalStorage persistence (data remains after refresh)
+- Warm, minimal brown & beige design system
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
+---
 
-Changes made via Lovable will be committed automatically to this repo.
+## 📊 How It Works
 
-**Use your preferred IDE**
+- Items are stored locally in the browser.
+- Expiry status updates dynamically based on the current date.
+- Monthly statistics are calculated from tracked data.
+- Smart suggestions appear only when sufficient data exists.
+- No preloaded demo data is included — all insights are generated from user input.
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+---
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+## 🧱 Tech Stack
 
-Follow these steps:
-
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
-```
-
-**Edit a file directly in GitHub**
-
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
-
-**Use GitHub Codespaces**
-
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
-
-## What technologies are used for this project?
-
-This project is built with:
-
+- React
 - Vite
 - TypeScript
-- React
-- shadcn-ui
 - Tailwind CSS
+- LocalStorage
 
-## How can I deploy this project?
+---
 
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
+## 🎨 Design Philosophy
 
-## Can I connect a custom domain to my Lovable project?
+FreshTrack follows a warm, earthy color palette inspired by brown and beige tones to create a calm and grounded user experience.
 
-Yes, you can!
+The goal was to avoid flashy dashboard aesthetics and instead build something that feels practical, human, and thoughtfully designed.
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+---
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+## 📌 Future Improvements
+
+- Browser notifications for expiring items
+- IndexedDB support for larger storage
+- Smart grocery quantity suggestions
+- Progressive Web App (PWA) support
+
+--- 
+
+## 👩‍💻 Author
+
+Built as a personal project by Saanvi Dixit.
